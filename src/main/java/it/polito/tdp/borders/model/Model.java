@@ -1,6 +1,7 @@
 package it.polito.tdp.borders.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +27,21 @@ public class Model {
 		dao.loadAllCountries(idMap);
 	}
 	
-	public void generateGraph(int anno) {
+	public Collection<Country> generateGraph(int anno) {
 		
 		//Carcico tutti i possibili nodi nella idMap, e la passo al dao per cercare i confini precedenti l'anno		
 		List<Border> confini = new ArrayList<>(dao.getCountryPairs(anno, idMap));
+		List<Country> temp = new ArrayList<>();
 		
 		for(Border b: confini) {
 			if(!grafo.containsEdge(b.getStateOne(), b.getStateTwo())) {
 				Graphs.addEdgeWithVertices(grafo, b.getStateOne(), b.getStateTwo());
 			}
+			if(!temp.contains(b.getStateOne())) {
+				temp.add(b.getStateOne());
+			}
 		}
+		return temp;
 	}
 	
 	public String trovaStatiConfinanti(){
@@ -57,6 +63,14 @@ public class Model {
 		
 		return result;
 	}
+	
+	public List<Country> trovaVicini(Country stato) {
+		
+		Recursive ricerca = new Recursive();
+		List<Country> temp = new ArrayList<>(ricerca.getListaVicini(grafo, stato));
+		return temp;
+		
+	}
 
 	public int numeroComponentiGrafo() {
 		
@@ -71,4 +85,10 @@ public class Model {
 	public int nEdges() {
 		return grafo.edgeSet().size();
 	}
+
+	public Collection<Country> getStatiDelGrafo() {
+		return this.grafo.vertexSet();
+	}
+
+
 }
