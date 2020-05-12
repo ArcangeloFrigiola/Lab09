@@ -12,6 +12,9 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
 
 import it.polito.tdp.borders.db.BordersDAO;
 
@@ -69,6 +72,37 @@ public class Model {
 		Recursive ricerca = new Recursive();
 		List<Country> temp = new ArrayList<>(ricerca.getListaVicini(grafo, stato));
 		return temp;
+		
+	}
+	
+	public List<Country> visitaInProfondita(Country source) {
+		
+		GraphIterator<Country, DefaultEdge> dfv = new DepthFirstIterator<>(grafo, source);
+	    List<Country> visit = new ArrayList<>();
+	    
+	    while(dfv.hasNext()) {
+	    	visit.add(dfv.next());
+	    }
+	    
+	    return visit;
+	}
+	
+    public List<Country> visitaInAmpiezza(Country source) {
+		
+		GraphIterator<Country, DefaultEdge> bfv = new BreadthFirstIterator<>(grafo, source);
+	    List<Country> visit = new ArrayList<>();
+	    
+	    while(bfv.hasNext()) {
+	    	visit.add(bfv.next());
+	    }
+	    
+	    return visit;
+	}
+	
+	public void alberoDiVisita(Country stato) {
+		
+		AlberoDiVisita albero = new AlberoDiVisita();
+		Map<Country, Country> result = new HashMap<>(albero.alberoVisita(stato, grafo));
 		
 	}
 

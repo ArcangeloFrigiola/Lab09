@@ -68,7 +68,7 @@ public class FXMLController {
     void doCalcolaVicini(ActionEvent event) {
     	
     	this.txtResult.clear();
-    	List<Country> temp = new ArrayList<>(this.model.trovaVicini(this.statesComboBox.getValue()));
+    	List<Country> temp = new ArrayList<>(this.model.visitaInAmpiezza(this.statesComboBox.getValue()));
     	this.txtResult.appendText("Stati raggiungibili via terra dallo stato selezionato:\n");
     	temp.remove(0);
     	for(Country c: temp) {
